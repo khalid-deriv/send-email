@@ -19,19 +19,33 @@ exports.handler = async function (event, context) {
         subject: emailDetails.subject,
         text: 'Email from ' + emailDetails.name + ':\n\n' + emailDetails.message
     };
-    return transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-          console.log(error)
+    try {
+        await transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log("error", error)
+                return {
+                    statusCode: 500,
+                    body: JSON.stringify({
+                      error: error
+                    })
+                }
+            }
+            return {
+                statusCode: 200,
+                body: JSON.stringify(info.response)
+              }
+
+        })
+    } catch (e) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Error: ' + error }),
-          };
-      } else {
-          console.log(info.response)
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ message: 'Email sent: ' + info.response }),
-          };
+            body: JSON.stringify({
+              error: e.message
+            })
+        }
+    }
+    return {
+        statusCode: 200
       }
-    });
+    
   }
