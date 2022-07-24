@@ -21,11 +21,13 @@ exports.handler = async function (event, context) {
     };
     return transporter.sendMail(mailOptions, function(error, info){
       if (error) {
+          console.log(error)
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Error: ' + error }),
           };
       } else {
+          console.log(info.response)
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Email sent: ' + info.response }),
