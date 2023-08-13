@@ -4,7 +4,8 @@ var nodemailer = require('nodemailer');
 
 
 var transporter = nodemailer.createTransport({
-  service: 'Mailgun',
+  host: "smtp-relay.sendinblue.com",
+  port: 587,
   auth: {
     user: process.env.USR,
     pass: process.env.PASS
